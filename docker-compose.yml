@@ -24,7 +24,8 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/postgres
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@db:5432/postgres"
+      LOG_LEVEL: "INFO"
     ports:
       - "8080:8000"
     command: >
@@ -32,8 +33,43 @@ services:
     networks:
       - app-network
 
+  client:
+    build:
+      context: ./m-video-test-client
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      URL: "http://app:8000/api/data"
+      FILE_PATH: "/app/logs/client.log"
+      M: "1000"
+      N: "5"
+      LOG_LEVEL: "INFO"
+    volumes:
+      - client_logs:/app/logs
+    networks:
+      - app-network
+
+  background-processing:
+    build:
+      context: ./m-video-test-background-processing
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      URL: "http://app:8000/api/data"
+      FILE_PATH: "/app/data/background-data.txt"
+      TIMER: "10"
+      LOG_LEVEL: "INFO"
+    volumes:
+      - background_data:/app/data
+    networks:
+      - app-network
+
 volumes:
   db_data:
+  client_logs:
+  background_data:
 
 networks:
   app-network:

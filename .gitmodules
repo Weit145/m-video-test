@@ -1,3 +1,9 @@
 [submodule "m-video-test-web-api"]
 	path = m-video-test-web-api
 	url = https://github.com/Weit145/m-video-test-web-api
+[submodule "m-video-test-client"]
+	path = m-video-test-client
+	url = https://github.com/Weit145/m-video-test-client
+[submodule "m-video-test-background-processing"]
+	path = m-video-test-background-processing
+	url = https://github.com/Weit145/m-video-test-background-processing
